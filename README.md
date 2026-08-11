@@ -4,7 +4,7 @@ A step-by-step guide to turning a spare Apple Silicon Mac into an always-on Code
 
 > This guide is inspired by YK Dojo’s excellent [Claude Controls Mac](https://ykdojo.github.io/claude-controls-mac/) project, but the setup below is designed specifically for the current Codex experience in the ChatGPT desktop app and Codex CLI.
 >
-> Codex features change quickly. This guide reflects the product available in July 2026.
+> Codex features change quickly. This guide was last verified against official OpenAI documentation on 11 August 2026.
 
 ## Why do this?
 
@@ -61,8 +61,11 @@ Codex CLI is excellent for terminal-based coding and automation, but Codex Remot
 The desktop app provides:
 
 - Codex projects and persistent chats;
+- multi-repository projects and combined review;
 - Computer Use for seeing, clicking, and typing in Mac applications;
 - remote access from the ChatGPT mobile app;
+- chat handoff between connected hosts;
+- a built-in browser, appshots, goals, hooks, plugins, and Record & Replay;
 - screenshots, approvals, diffs, terminal output, and task status on your phone;
 - multiple concurrent Codex chats;
 - app-specific permissions;
@@ -361,6 +364,15 @@ pmset -g custom
 
 For a Mac mini, this is generally sufficient.
 
+For a genuinely headless Mac mini, it is also reasonable to disable display
+sleep because there is no physical display to save:
+
+```bash
+sudo pmset -c sleep 0
+sudo pmset -c displaysleep 0
+sudo pmset -c disksleep 0
+```
+
 For a MacBook:
 
 - keep it connected to power;
@@ -445,7 +457,7 @@ sudo xcodebuild -runFirstLaunch
 
 ## 8. Install the ChatGPT desktop app
 
-As of July 2026, Codex is part of the ChatGPT desktop app.
+Since 9 July 2026, Codex has been part of the ChatGPT desktop app.
 
 Download the current macOS Apple Silicon version from OpenAI and install it in `/Applications`.
 
@@ -492,6 +504,21 @@ Confirm installation:
 ```bash
 codex --version
 ```
+
+Useful first-run checks inside Codex are:
+
+```text
+/init          create an AGENTS.md for the current project
+/status        show the active model, permissions, and configuration
+/permissions   choose the current permission profile
+/model         choose a model and reasoning effort
+/review        review repository changes
+```
+
+To check for updates, compare `codex --version` with the current stable release
+and rerun the official installer when necessary. Also check the ChatGPT app's
+updater, `softwareupdate -l`, and the official Codex changelog before declaring
+an always-on host current.
 
 Start Codex from a project folder:
 
@@ -561,6 +588,27 @@ network_access = true
 ```
 
 This allows Codex to work inside the selected project and use the network, while asking when it needs to go beyond the configured boundary.
+
+`network_access = true` permits broad outbound command-line access. Current
+Codex can optionally constrain that traffic with the network proxy:
+
+```toml
+[features.network_proxy]
+enabled = true
+domains = {
+  "github.com" = "allow",
+  "api.github.com" = "allow",
+  "**.openai.com" = "allow"
+}
+```
+
+The proxy is allowlist-first and does not grant network access by itself; keep
+`sandbox_workspace_write.network_access = true` when using it. Add local or
+private-network destinations only when a workflow genuinely needs them.
+
+Codex also supports reusable permission profiles through
+`default_permissions`. Profiles are a newer composable alternative to the
+legacy `sandbox_mode` configuration. Do not configure both styles at once.
 
 Because configuration names can evolve, confirm the active policy in Codex with:
 
@@ -674,6 +722,14 @@ git config --global init.defaultBranch main
 git config --global pull.rebase false
 ```
 
+On a machine where multiple agents share repositories, a global Git identity
+may be inappropriate. Use repository-local configuration or inline identity
+overrides instead, for example:
+
+```bash
+git -c user.name="Agent Name" -c user.email="agent@agents.local" commit
+```
+
 ---
 
 ## 13. Set up Computer Use
@@ -750,6 +806,16 @@ The preferred order is:
 6. raw Computer Use.
 
 Computer Use is valuable, but visual automation is less deterministic than structured interfaces.
+
+### Appshots and Record & Replay
+
+Appshots let you send the frontmost Mac app window and available text to Codex
+by pressing both Command keys. They are useful when Codex needs context from an
+app but does not need to control it.
+
+Record & Replay can turn a workflow you demonstrate on macOS into a reusable
+skill. Use it for repetitive visual workflows that are easier to show than
+describe, then inspect and narrow the generated skill before relying on it.
 
 ---
 
@@ -876,6 +942,19 @@ On the source computer:
 This gives you a richer interface than a raw SSH terminal because you can see Codex projects, approvals, screenshots, diffs, and task state.
 
 SSH remains useful for low-level administration.
+
+### Connect projects on SSH hosts and hand off chats
+
+The desktop app can discover concrete aliases from `~/.ssh/config`, start the
+Codex app server over SSH, and run a project against the remote filesystem. The
+remote host needs `codex` installed, authenticated, and available on the remote
+login shell's `PATH`.
+
+After the same repository and project path are saved on two connected hosts,
+Codex can hand off a chat and its Git state between them. The destination uses
+or creates a worktree so the conversation can continue from matching project
+state. Do not expose Codex app-server transports directly to a LAN or the public
+internet; use SSH and a VPN or mesh network.
 
 ---
 
@@ -1034,7 +1113,11 @@ Prefer, in order:
 3. Playwright or another browser MCP server;
 4. Computer Use.
 
-### Install Chrome
+### Optionally install Chrome
+
+Chrome is not required for the built-in Codex browser. Install it when Codex
+needs an existing Chrome session, the supported extension, or Chrome DevTools
+Protocol access.
 
 ```bash
 brew install --cask google-chrome
@@ -1220,6 +1303,9 @@ chmod +x ~/bin/codex-project-check
 ```
 
 The more autonomous the workflow, the narrower and more explicit its boundaries should be.
+
+> Older examples may use `codex exec --full-auto`. That flag is deprecated;
+> prefer `codex exec --sandbox workspace-write` and an explicit approval policy.
 
 ---
 
@@ -1497,13 +1583,14 @@ You do not need to force an SSH-launched agent into a GUI-owned `tmux` process. 
 
 - [Original Claude Controls Mac guide](https://ykdojo.github.io/claude-controls-mac/)
 - [Original Claude Controls Mac repository](https://github.com/ykdojo/claude-controls-mac)
-- [Codex CLI documentation](https://developers.openai.com/codex/cli)
-- [Codex Remote connections](https://developers.openai.com/codex/remote-connections)
-- [Codex Computer Use](https://developers.openai.com/codex/app/computer-use)
-- [Codex agent approvals and security](https://developers.openai.com/codex/agent-approvals-security)
-- [Codex configuration reference](https://developers.openai.com/codex/config-reference)
-- [Codex MCP documentation](https://developers.openai.com/codex/mcp)
-- [ChatGPT release notes](https://help.openai.com/en/articles/6825453-chatgpt-release-notes)
+- [Codex CLI documentation](https://learn.chatgpt.com/docs/codex/cli)
+- [Codex Remote connections](https://learn.chatgpt.com/docs/remote-connections)
+- [Codex Computer Use](https://learn.chatgpt.com/docs/computer-use)
+- [Codex agent approvals and security](https://learn.chatgpt.com/docs/agent-approvals-security)
+- [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
+- [Codex MCP documentation](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+- [What's new in ChatGPT and Codex](https://learn.chatgpt.com/docs/whats-new)
+- [Codex changelog](https://learn.chatgpt.com/docs/changelog)
 
 ## Attribution
 
