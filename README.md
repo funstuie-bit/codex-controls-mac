@@ -924,7 +924,86 @@ This replaces the Claude guide’s `claude remote-control` server and its `ic rc
 
 ---
 
-## 16. Control the Codex Mac from another desktop
+## 16. Use Codex Remote with Voice
+
+ChatGPT Voice can be used with Codex through Remote on iOS after the phone is
+paired with the desktop host. This gives you a live spoken conversation that
+can start work, check progress, steer active tasks, and report blockers or
+results while the Mac supplies the files, tools, credentials, and execution
+environment.
+
+Availability depends on your ChatGPT plan, rollout, and workspace settings.
+Voice is currently documented for Plus, Pro, Business, Edu, and Enterprise
+plans. An administrator may need to enable the relevant features in a managed
+workspace.
+
+### Start a Remote voice conversation
+
+1. Confirm that the host Mac is awake, online, signed in, and running the
+   ChatGPT desktop app.
+2. On the iPhone, open the ChatGPT mobile app and select **Remote**.
+3. Select the paired Mac and open a new, empty chat or task.
+4. Select **Start new voice chat** before sending any other message.
+5. The first time, allow microphone access and choose a voice.
+6. Start talking. Select **End** when you finish.
+
+The chat must begin in Voice mode. If you type or send a normal message first,
+the microphone provides voice dictation rather than a live Voice conversation.
+To resume a previous Voice conversation, open it and select **Start voice
+chat**.
+
+Only one Voice conversation can be active across the desktop app at a time.
+Voice has a separate, plan-dependent allowance, while tasks it starts continue
+to use the normal Codex usage budget.
+
+### Useful Remote Voice workflows
+
+Voice can create separate threads for longer-running work, check active
+threads, and send follow-up instructions. Suitable prompts include:
+
+```text
+Start a Codex task to run this project's tests and investigate the first
+failure. Do not change anything until you have explained the cause to me.
+```
+
+```text
+Check my active Codex tasks and give me a short spoken summary of progress,
+blockers, and anything waiting for approval.
+```
+
+```text
+Help me think through this problem aloud. Turn our discussion into a plan,
+then start a separate task only after I approve the plan.
+```
+
+Other useful patterns include spoken meeting preparation, a morning rundown,
+walking through an inbox one message at a time without sending anything, and
+steering a long-running task while away from the desk.
+
+### Permissions and screen context
+
+Voice-directed work uses the same permissions and approvals as Chat, Work, and
+Codex in the desktop app. Watch the phone for approval requests: a task may be
+waiting even when the conversation sounds as though it is still checking.
+
+On macOS, **Settings → Voice → Screen context** lets you say “Take a look at
+this” and provide an appshot of the frontmost window. An appshot may include
+the window image and accessible text, including text outside the visible scroll
+area. Keep sensitive applications closed and inspect the frontmost window
+before sharing screen context.
+
+If Voice is unavailable:
+
+- update both the desktop and mobile apps;
+- confirm that the phone and host use the same account and workspace;
+- check plan, rollout, region, and workspace-admin availability;
+- check microphone access;
+- confirm that another Voice conversation is not already active;
+- verify that the host is awake, online, and still running the desktop app.
+
+---
+
+## 17. Control the Codex Mac from another desktop
 
 Codex Remote can also be available between supported desktop devices.
 
@@ -958,7 +1037,7 @@ internet; use SSH and a VPN or mesh network.
 
 ---
 
-## 17. Enable Screen Sharing
+## 18. Enable Screen Sharing
 
 Screen Sharing is your recovery and manual-control route.
 
@@ -989,7 +1068,7 @@ Do not expose VNC directly to the public internet.
 
 ---
 
-## 18. Add Tailscale for access away from home
+## 19. Add Tailscale for access away from home
 
 `.local` hostnames work only on the local network. Tailscale provides encrypted private connectivity without exposing SSH or Screen Sharing publicly.
 
@@ -1060,7 +1139,7 @@ ssh codex-mac whoami
 
 ---
 
-## 19. Add clipboard transfer over SSH
+## 20. Add clipboard transfer over SSH
 
 For text, macOS already includes `pbcopy` and `pbpaste`.
 
@@ -1102,7 +1181,7 @@ Avoid copying important credentials into the target clipboard unless necessary. 
 
 ---
 
-## 20. Configure browser access
+## 21. Configure browser access
 
 Codex can work with browsers through several routes.
 
@@ -1154,7 +1233,7 @@ Recommended:
 
 ---
 
-## 21. Add MCP servers and plugins
+## 22. Add MCP servers and plugins
 
 MCP gives Codex structured access to external tools and context.
 
@@ -1194,7 +1273,7 @@ Plugins installed in the ChatGPT desktop app can also expose skills, tools, and 
 
 ---
 
-## 22. Create a dedicated projects directory
+## 23. Create a dedicated projects directory
 
 Keep agent-accessible work in a clear boundary:
 
@@ -1230,7 +1309,7 @@ git commit -m "Checkpoint before Codex work"
 
 ---
 
-## 23. Create useful shell helpers
+## 24. Create useful shell helpers
 
 On the main Mac, add the following to `~/.zshrc`:
 
@@ -1266,7 +1345,7 @@ These helpers do not replace Codex Remote. They provide simple administrative ac
 
 ---
 
-## 24. Set up repeatable Codex CLI tasks
+## 25. Set up repeatable Codex CLI tasks
 
 Codex CLI supports non-interactive execution through `codex exec`.
 
@@ -1309,7 +1388,7 @@ The more autonomous the workflow, the narrower and more explicit its boundaries 
 
 ---
 
-## 25. Install other applications
+## 26. Install other applications
 
 Once Computer Use works, Codex can help install and configure applications, but some steps will still require you.
 
@@ -1342,7 +1421,7 @@ This pattern works for:
 
 ---
 
-## 26. Test the complete setup
+## 27. Test the complete setup
 
 Run these tests in order.
 
@@ -1444,7 +1523,7 @@ Confirm the host returns.
 
 ---
 
-## 27. Recommended operating model
+## 28. Recommended operating model
 
 The most reliable pattern is to use the least fragile tool available.
 
@@ -1491,7 +1570,7 @@ Use:
 
 ---
 
-## 28. Security checklist
+## 29. Security checklist
 
 Before treating the Mac as an autonomous host, confirm:
 
@@ -1516,7 +1595,7 @@ Before treating the Mac as an autonomous host, confirm:
 
 ---
 
-## 29. Important limitations
+## 30. Important limitations
 
 This setup creates a capable agent host, not a perfectly reliable autonomous employee.
 
@@ -1548,7 +1627,7 @@ The most reliable autonomous workflows are those with:
 
 ---
 
-## 30. Final architecture
+## 31. Final architecture
 
 The finished setup looks like this:
 
@@ -1585,6 +1664,7 @@ You do not need to force an SSH-launched agent into a GUI-owned `tmux` process. 
 - [Original Claude Controls Mac repository](https://github.com/ykdojo/claude-controls-mac)
 - [Codex CLI documentation](https://learn.chatgpt.com/docs/codex/cli)
 - [Codex Remote connections](https://learn.chatgpt.com/docs/remote-connections)
+- [ChatGPT Voice](https://learn.chatgpt.com/docs/features/voice)
 - [Codex Computer Use](https://learn.chatgpt.com/docs/computer-use)
 - [Codex agent approvals and security](https://learn.chatgpt.com/docs/agent-approvals-security)
 - [Codex configuration reference](https://learn.chatgpt.com/docs/config-file/config-reference)
