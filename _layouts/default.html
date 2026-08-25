@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ site.description }}">
+    <meta name="theme-color" content="#0b0d10">
+    <title>{{ page.title | default: site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/site.css' | relative_url }}">
+  </head>
+  <body>
+    <button class="nav-toggle" type="button" aria-controls="guide-nav" aria-expanded="false">
+      Sections
+    </button>
+    <aside class="sidebar" id="guide-nav">
+      <a class="brand" href="{{ '/' | relative_url }}">
+        <span class="brand-mark" aria-hidden="true">C</span>
+        <span>Codex Controls Mac</span>
+      </a>
+      <p class="sidebar-label">Guide</p>
+      <nav class="section-nav" aria-label="Guide sections"></nav>
+      <div class="sidebar-footer">
+        <a href="https://github.com/funstuie-bit/codex-controls-mac">View on GitHub</a>
+      </div>
+    </aside>
+    <main class="content" id="main-content">
+      {{ content }}
+    </main>
+    <script src="{{ '/assets/site.js' | relative_url }}"></script>
+  </body>
+</html>

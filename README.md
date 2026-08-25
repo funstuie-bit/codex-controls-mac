@@ -24,6 +24,40 @@ The approach in this guide is:
 - Use Codex CLI for terminal-first work and repeatable automation.
 - Keep permissions as narrow as practical, even on the isolated machine.
 
+## Contents
+
+1. [Start fresh on the target Mac](#1-start-fresh-on-the-target-mac)
+2. [Give the target Mac a unique name](#2-give-the-target-mac-a-unique-name)
+3. [Enable Remote Login over SSH](#3-enable-remote-login-over-ssh)
+4. [Set up passwordless SSH from your main Mac](#4-set-up-passwordless-ssh-from-your-main-mac)
+5. [Decide how sudo should work](#5-decide-how-sudo-should-work)
+6. [Keep the Mac awake](#6-keep-the-mac-awake)
+7. [Install Homebrew and basic tools](#7-install-homebrew-and-basic-tools)
+8. [Install the ChatGPT desktop app](#8-install-the-chatgpt-desktop-app)
+9. [Install Codex CLI](#9-install-codex-cli)
+10. [Configure Codex permissions](#10-configure-codex-permissions)
+11. [Add persistent instructions with `AGENTS.md`](#11-add-persistent-instructions-with-agentsmd)
+12. [Sign in to GitHub](#12-sign-in-to-github)
+13. [Set up Computer Use](#13-set-up-computer-use)
+14. [Enable locked Computer Use](#14-enable-locked-computer-use)
+15. [Pair the Mac with your phone using Codex Remote](#15-pair-the-mac-with-your-phone-using-codex-remote)
+16. [Use Codex Remote with Voice](#16-use-codex-remote-with-voice)
+17. [Control the Codex Mac from another desktop](#17-control-the-codex-mac-from-another-desktop)
+18. [Enable Screen Sharing](#18-enable-screen-sharing)
+19. [Add Tailscale for access away from home](#19-add-tailscale-for-access-away-from-home)
+20. [Add clipboard transfer over SSH](#20-add-clipboard-transfer-over-ssh)
+21. [Configure browser access](#21-configure-browser-access)
+22. [Add MCP servers and plugins](#22-add-mcp-servers-and-plugins)
+23. [Create a dedicated projects directory](#23-create-a-dedicated-projects-directory)
+24. [Create useful shell helpers](#24-create-useful-shell-helpers)
+25. [Set up repeatable Codex CLI tasks](#25-set-up-repeatable-codex-cli-tasks)
+26. [Install other applications](#26-install-other-applications)
+27. [Test the complete setup](#27-test-the-complete-setup)
+28. [Recommended operating model](#28-recommended-operating-model)
+29. [Security checklist](#29-security-checklist)
+30. [Important limitations](#30-important-limitations)
+31. [Final architecture](#31-final-architecture)
+
 ## Why this setup?
 
 ### Why not run Codex in a container?

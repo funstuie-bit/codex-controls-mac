@@ -1,0 +1,10 @@
+title: Codex Controls Mac
+description: Set up a spare Mac as a secure, always-on Codex host.
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+exclude:
+  - Agent-Reach
+  - scripts
+  - vendor
